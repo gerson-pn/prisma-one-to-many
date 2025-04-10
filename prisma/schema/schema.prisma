@@ -1,27 +1,10 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
+  output          = "../generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-model Usuario {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  nome  String
-
-  telefones Telefone[]
-}
-
-model Telefone {
-  id     Int    @id @default(autoincrement())
-  ddd    String
-  numero String
-
-  usuario   Usuario @relation(fields: [usuarioId], references: [id])
-  usuarioId Int
-}
-

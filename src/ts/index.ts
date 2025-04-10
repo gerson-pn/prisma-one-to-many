@@ -1,27 +1,14 @@
-import { Telefone, PrismaClient, Usuario } from '@prisma/client'
+import { Telefone, Usuario } from '@prisma/client'
+import { atualizarUsuario, cadastrarUsuario, cadastrarUsuarioTelefones, excluirUsuario, obterUsuarioCompletoPorId, obterUsuarioPorEmail, obterUsuarioPorId } from './crud/usuario/funcoes'
+import { cadastrarTelefone } from './crud/telefone/funcoes';
 
-const prisma = new PrismaClient()
-
-const cadastrar = async (usuario: Usuario & { telefones: Telefone[] }) => {
-
-    let resultado = await prisma.usuario.create({
-        data: {
-            nome: usuario.nome,
-            email: usuario.email,
-            telefones: {
-                create: usuario.telefones.map(telefone =>({
-                    ddd: telefone.ddd,
-                    numero: telefone.numero
-                }))
-            }
-        }
-    })
-
-    console.log(`Usuario cadastrado:`)
-    console.log(`Nome: ${usuario.nome}, e-mail: ${usuario.email}`)
+const hj: Usuario = {
+    id: 0,
+    nome: "Haroldo Junior",
+    email: "hj@mail.com"
 }
 
-const usuario: Usuario & { telefones: Telefone[] } = {
+const jp: Usuario & { telefones: Telefone[] } = {
     id: 0,
     nome: "Joao Paulo",
     email: "jp@mail.com",
@@ -41,4 +28,37 @@ const usuario: Usuario & { telefones: Telefone[] } = {
     ]
 }
 
-cadastrar(usuario)
+
+setTimeout(async () => { cadastrarUsuario(hj) }, 1000);
+setTimeout(async () => { cadastrarUsuarioTelefones(jp) }, 2000);
+
+setTimeout(async () => { obterUsuarioPorId(1) }, 6000);
+setTimeout(async () => { obterUsuarioPorEmail("jp@mail.com") }, 6000);
+
+setTimeout(async () => { obterUsuarioPorId(3000) }, 7000);
+
+setTimeout(async () => { obterUsuarioCompletoPorId(2) }, 7000);
+setTimeout(async () => { obterUsuarioCompletoPorId(1) }, 7000);
+
+const usuarioAtualizacao: Usuario = {
+    nome: "Gilberto Gil",
+    email: "gbl@mail.com",
+    id: 2
+}
+
+setTimeout(async () => { atualizarUsuario(usuarioAtualizacao) }, 8000);
+setTimeout(async () => { obterUsuarioCompletoPorId(2) }, 20000);
+
+
+const telefoneNovo: Telefone = {
+    id: 0,
+    usuarioId: 0,
+    ddd: "77",
+    numero: "777777777"
+}
+
+setTimeout(async () => { cadastrarTelefone(2, telefoneNovo) }, 10000);
+setTimeout(async () => { obterUsuarioCompletoPorId(2) }, 30000);
+
+setTimeout(async () => { excluirUsuario(2) }, 30000);
+setTimeout(async () => { obterUsuarioCompletoPorId(2) }, 40000);
